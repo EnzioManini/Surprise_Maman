@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyeux Anniversaire Maman ! 🎉</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Styles Généraux et Fond Festif --- */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Georgia', serif;
+            overflow: hidden; 
+            /* Une belle image d'anniversaire aux tons pastel */
+            background: url('https://images.unsplash.com/photo-1530103862676-de3c9a728f4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+            background-size: cover;
+        }
+
+        /* Un léger voile blanc pour rendre le texte plus lisible */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.4);
+            z-index: 1;
+        }
+
+        /* --- Banderole de fin --- */
+        #banner {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            background-color: #8e44ad; /* Violet élégant */
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 2.5em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 30; 
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: transform 1s ease-out, opacity 1s ease-out;
+        }
+
+        /* --- Animation des objets qui tombent --- */
+        .falling-item {
+            position: absolute;
+            top: -10%;
+            z-index: 5;
+            user-select: none;
+            animation: fall linear forwards, sway ease-in-out infinite alternate;
+        }
+
+        .falling-item img {
+            width: 35px; height: 35px;
+        }
+
+        @keyframes fall {
+            to { top: 110%; }
+        }
+
+        @keyframes sway {
+            from { transform: translateX(-30px) rotate(0deg); }
+            to { transform: translateX(30px) rotate(360deg); }
+        }
+
+        /* --- Conteneur principal (Texte + Bouton) --- */
+        #main-container {
+            text-align: center;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9); /* Plus opaque pour bien lire */
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            transition: opacity 1s ease;
+            max-width: 80%;
+        }
+
+        h1 {
+            color: #8e44ad; /* Violet assorti */
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            transition: opacity 0.5s ease; 
+        }
+
+        /* --- Bouton Joyeux --- */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        button {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(142, 68, 173, 0.4);
+            margin-top: 10px;
+            animation: pulse 2s infinite; /* Pulsation plus douce */
+        }
+
+        button:hover {
+            background-color: #9b59b6;
+            animation: none; 
+            transform: scale(1.05);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        /* --- Conteneur Photo (Caché au début) --- */
+        #photo-container {
+            display: none;
+            opacity: 0;
+            text-align: center;
+            z-index: 20;
+            transition: opacity 2s ease;
+            margin-top: 50px; 
+        }
+
+        /* --- Effet Polaroïd --- */
+        .polaroid {
+            background: white;
+            padding: 15px 15px 50px 15px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            transform: rotate(-2deg); 
+            display: inline-block;
+        }
+
+        .polaroid img {
+            max-width: 80vw;
+            max-height: 60vh;
+            display: block;
+            border: 1px solid #ddd;
+        }
+
+        .polaroid-caption {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5em;
+            color: #333;
+            margin-top: 15px;
+            text-align: center;
+            transform: rotate(1deg); 
+        }
+
+        /* --- Éclat Festif Final --- */
+        .explosion-item {
+            position: absolute;
+            top: 50%; left: 50%;
+            z-index: 25;
+            pointer-events: none;
+            user-select: none;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1), opacity 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div id="banner">Joyeux Anniversaire Maman ! 🎉🎂</div>
+
+    <div id="main-container">
+        <h1 id="message-text">Coucou Maman...</h1>
+        <button id="reveal-btn">Clique ici ✨</button>
+    </div>
+
+    <div id="photo-container">
+        <div class="polaroid">
+            <img src="photo.png" alt="Photo Maman">
+            <div class="polaroid-caption">Je t'aime très fort ❤️</div>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('reveal-btn');
+        const mainContainer = document.getElementById('main-container');
+        const photoContainer = document.getElementById('photo-container');
+        const messageText = document.getElementById('message-text');
+        const banner = document.getElementById('banner'); 
+
+        // Les messages qui vont défiler (modifiez-les comme vous voulez !)
+        const messages = [
+            "J'ai préparé une petite surprise pour toi...",
+            "Pour te dire à quel point tu comptes pour moi",
+            "Merci pour tout ce que tu fais au quotidien",
+            "Et pour être la meilleure des mamans !",
+            "Prête pour la surprise ?"
+        ];
+        
+        let clickCount = 0; 
+
+        btn.addEventListener('click', () => {
+            if (clickCount < messages.length) {
+                messageText.style.opacity = '0';
+                
+                setTimeout(() => {
+                    messageText.innerText = messages[clickCount];
+                    messageText.style.opacity = '1';
+                    clickCount++; 
+                }, 500);
+            } 
+            else {
+                mainContainer.style.opacity = '0'; 
+                
+                setTimeout(() => {
+                    mainContainer.style.display = 'none';
+                    photoContainer.style.display = 'block'; 
+                    
+                    setTimeout(() => {
+                        photoContainer.style.opacity = '1'; 
+                        banner.style.transform = 'translateY(0)';
+                        banner.style.opacity = '1';
+                        explodeFestive(); // Lance l'explosion d'anniversaire !
+                    }, 50);
+                }, 1000);
+            }
+        });
+
+        // Fonction pour le feu d'artifice d'anniversaire
+        function explodeFestive() {
+            const festiveEmojis = ['🎉', '✨', '🎈', '🎁', '💛', '🎊'];
+            const numberOfItems = 50; 
+
+            for (let i = 0; i < numberOfItems; i++) {
+                const item = document.createElement('div');
+                item.classList.add('explosion-item');
+                item.innerText = festiveEmojis[Math.floor(Math.random() * festiveEmojis.length)];
+                document.body.appendChild(item);
+
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * (window.innerWidth / 2) + 50; 
+                
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                const size = Math.random() * 2 + 1; 
+
+                requestAnimationFrame(() => {
+                    item.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(${size})`;
+                    item.style.opacity = '0'; 
+                });
+
+                setTimeout(() => {
+                    item.remove();
+                }, 1500);
+            }
+        }
+
+        // Liens des objets qui tombent (Ballons, étoiles, confettis, fleurs...)
+        const fallingLinks = [
+            'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f388.png', // Ballon rouge
+            'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/2728.png',  // Étoiles
+            'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f389.png', // Confettis
+            'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f338.png', // Fleur cerisier
+            'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f33b.png'  // Tournesol
+        ];
+
+        function createFallingItem() {
+            const item = document.createElement('div');
+            item.classList.add('falling-item');
+            
+            const img = document.createElement('img');
+            img.src = fallingLinks[Math.floor(Math.random() * fallingLinks.length)];
+            item.appendChild(img);
+            
+            item.style.left = Math.random() * 100 + 'vw';
+            
+            const fallDuration = Math.random() * 5 + 5;
+            const swayDuration = Math.random() * 2 + 2;
+            item.style.animationDuration = `${fallDuration}s, ${swayDuration}s`;
+            
+            document.body.appendChild(item);
+
+            setTimeout(() => {
+                item.remove();
+            }, fallDuration * 1000);
+        }
+
+        setInterval(createFallingItem, 150); // Un peu plus espacé pour un effet doux
+    </script>
+</body>
+</html>
